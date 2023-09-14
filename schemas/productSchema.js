@@ -25,29 +25,36 @@ export const productSchema = z.object({
       message: 'Price must not exceed 9.999.999 CLP.'
     }),
 
-  image: z
-    .string(255, {
-      invalid_type_error: 'Image must be a string.',
-      required_error: 'Image is required.',
+  image: z.string()
+    .min(1, {
+      message: 'A valid url is required.',
     })
-    .min(1),
-  fact_sheet: z
-    .string(255, {
-      invalid_type_error: 'Fact sheet must be a string.',
-      required_error: 'Fact sheet is required.',
+    .max(255, {
+      message: 'Image url must not exceed 255 characters.',
+    }),
+
+  fact_sheet: z.string()
+    .min(1, {
+      message: 'Fact sheet is required and must be a non-empty string.',
     })
-    .min(1),
-  presentation: z
-    .number({
-      invalid_type_error: 'Presentation must be a number',
-      required_error: 'Presentation is required.'
+    .max(255, {
+      message: 'Fact sheet must not exceed 255 characters.',
+    }),
+
+  presentation: z.number()
+    .min(1, {
+      message: 'Presentation is required and must be a non-empty number.',
     })
-    .min(0)
-    .max(9999999.99)
+    .max(9999999.99, {
+      message: 'Presentation must not exceed 9,999,999.99.',
+    })
     .transform(value => parseFloat(value.toFixed(2))),
-  seasonality: z
-    .array(z.string(), {
-      invalid_type_error: 'Seasonality must be an array.',
-      required_error: 'Seasonality es required.'
+
+  seasonality: z.array(z.string())
+    .min(1, {
+      message: 'Seasonality is required and must be a non-empty array.',
+    })
+    .max(255, {
+      message: 'Seasonality must not exceed 255 elements.'
     })
 });
