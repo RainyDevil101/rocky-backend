@@ -1,18 +1,17 @@
 import { Router } from 'express';
-import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from '../controllers/index.js';
-import { testMiddleware } from '../middlewares/testMiddleware.js';
+import { ProductController } from '../controllers/product.js';
 
 export const productRouter = Router();
 
 // /products 
 
 productRouter.route('/')
-  .get(testMiddleware, getProducts)
-  .post(createProduct);
+  .get(ProductController.getAll)
+  .post(ProductController.create);
 
 // /products/:id
 
 productRouter.route('/:id')
-  .get(getProduct)
-  .patch(updateProduct)
-  .delete(deleteProduct);
+  .get(ProductController.getById)
+  .patch(ProductController.update)
+  .delete(ProductController.delete);

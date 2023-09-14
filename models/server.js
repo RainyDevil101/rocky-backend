@@ -2,15 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { routes } from '../utils/routes.js';
-
+import { client } from '../db/connection.js';
 
 
 class Server {
 
   constructor() {
     this.app = express();
-    this.port = 8080;
+    this.port = process.env.PORTLH;
     this.server = http.createServer(this.app);
+
+    this.dbConnection();
 
     this.middlewares();
 
@@ -18,8 +20,18 @@ class Server {
     this.listen();
   };
 
+  async dbConnection() {
+    try {
+      await client.connect();
+      console.log('Database connected!');
+    } catch (error) {
+      throw new Error(error);
+    };
+  };
+
   middlewares() {
     this.app.use(cors());
+    this.app.use(express.json());
   };
 
   routes() {

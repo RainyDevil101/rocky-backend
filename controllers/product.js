@@ -1,32 +1,47 @@
+import { ProductModel } from '../models/postgresql/index.js';
 
-export const getProducts = async (req, res) => {
-  console.log('pepe');
+export class ProductController {
+  static async getAll(req, res) {
+    try {
+      const products = await ProductModel.getAll();
+      if (!products.error) return res.json(products);
+      res.status(400).json({ message: 'Products not found.' });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: 'Internal server error.' });
+    }
+  };
 
-  res.json({
-    message: 'get all'
-  });
-};
+  static async getById(req, res) {
 
-export const getProduct = async(req, res) => {
-  res.json({
-    message: 'get one '
-  });
-};
+    const { id } = req.params;
 
-export const createProduct = async(req, res) => {
-  res.json({
-    message: 'create '
-  });
-};
+    try {
+      const product = await ProductModel.getById({ id });
+      if (product) return res.json(product);
+      return res.status(400).json({ message: 'Product not found.' })
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: 'Internal server error.' });
+    };
 
-export const updateProduct = async(req, res) => {
-  res.json({
-    message: 'patch '
-  });
-};
+  };
 
-export const deleteProduct = async(req, res) => {
-  res.json({
-    message: 'delete '
-  });
+  static async create(req, res) {
+    const input = req.body;
+    const result = await ProductModel.create({ input });
+    if (result.error) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
+    }
+    return res.status(400).json({ message: `Product couldn't be created. Try again.` })
+  };
+
+  static async update(req, res) {
+
+  };
+
+  static async delete(req, res) {
+
+  };
+
 };
