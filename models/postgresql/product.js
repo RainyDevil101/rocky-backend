@@ -1,14 +1,14 @@
 import { client } from '../../db/index.js';
-import { validateProduct } from '../../validations/validationsBySchema.js';
 
 export class ProductModel {
 
   static async getAll() {
-    const text = `SELECT id, name, description, price, image, fact_sheet FROM products;`;
+
+    const text = `SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM products WHERE status = true;`;
     try {
       const { rowCount, rows } = await client.query(text);
       if (rowCount === 0) {
-        return { error: 'Products not found.' };
+        return null;
       }
       return { rowCount, rows };
     } catch (error) {
@@ -18,11 +18,15 @@ export class ProductModel {
   };
 
   static async getById({ id }) {
-    const text = `SELECT id, name, description, price, image, fact_sheet FROM products WHERE id = '${id}';`;
+    const query = {
+      text: 'SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM products WHERE id = $1 AND status = true;',
+      values: [id],
+    };
+
     try {
-      const { rows, rowCount } = await client.query(text);
+      const { rows, rowCount } = await client.query(query);
       if (rowCount === 0) {
-        return { error: 'Product not found.' };
+        return null;
       };
       return rows;
     } catch (error) {
@@ -33,13 +37,20 @@ export class ProductModel {
 
   static async create({ input }) {
 
+    const queryValues = Object.values(input);
+
+    const placeHolders = Array.from({ length: queryValues.length }, (_, index) => `$${index + 1}`);
+
+    const query = {
+      text: `INSERT INTO products (${Object.keys(input).join(', ')}) VALUES (${placeHolders.join(', ')});`,
+      values: queryValues,
+    };
+
+    console.log(query);
+
     try {
 
-      const result = await validateProduct(input);
-
-      if (result.error) return result;
-
-      return "pepe";
+      return input;
     } catch (error) {
       console.log(error);
       return false;

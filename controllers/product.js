@@ -1,10 +1,11 @@
 import { ProductModel } from '../models/postgresql/index.js';
+import { validateProduct } from '../validations/validationsBySchema.js';
 
 export class ProductController {
   static async getAll(req, res) {
     try {
       const products = await ProductModel.getAll();
-      if (!products.error) return res.json(products);
+      if (products) return res.json(products);
       res.status(400).json({ message: 'Products not found.' });
     } catch (error) {
       console.log(error);
@@ -28,12 +29,26 @@ export class ProductController {
   };
 
   static async create(req, res) {
+    
     const input = req.body;
-    const result = await ProductModel.create({ input });
-    if (result.error) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
-    }
-    return res.status(400).json({ message: `Product couldn't be created. Try again.` })
+
+    const resultValdiation = await validateProduct(input);
+
+    if (resultValdiation.error) {
+      return res.status(400).json({ error: JSON.parse(resultValdiation.error.message) });
+    };
+    
+    try {
+      const result = await ProductModel.create({ input });
+
+    } catch (error) {
+      
+    };
+
+
+
+    return res.json(req.body);
+    
   };
 
   static async update(req, res) {
