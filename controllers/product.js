@@ -1,62 +1,68 @@
 import { ProductModel } from '../models/postgresql/index.js';
-import { validateProduct } from '../validations/validationsBySchema.js';
-
-const internalError = { error: 'Internal server error.' };
+import { validatePartialProduct, validateProduct } from '../validations/validationsBySchema.js';
 
 export class ProductController {
   static async getAll(req, res) {
-    try {
-      const products = await ProductModel.getAll();
-      if (products) return res.json(products);
-      res.status(400).json({ message: 'Products not found.' });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(internalError);
-    }
+
+    const products = await ProductModel.getAll();
+
+    if (products.error) return res.status(400).json({ message: 'Products not found.' });
+
+    return res.json(products);
+
   };
 
   static async getById(req, res) {
 
     const { id } = req.params;
 
-    try {
-      const product = await ProductModel.getById({ id });
-      if (product) return res.json(product);
-      return res.status(400).json({ message: 'Product not found.' })
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(internalError);
-    };
+    const product = await ProductModel.getById({ id });
+
+    if (product.error) return res.status(400).json({ message: 'Product not found.' });
+
+    return res.json(product);
 
   };
 
   static async create(req, res) {
 
     const input = req.body;
-    try {
 
-      const resultValdiation = await validateProduct(input);
+    const resultValidation = await validateProduct(input);
 
-      if (resultValdiation.error) {
-        return res.status(400).json({ error: JSON.parse(resultValdiation.error.message) });
-      };
+    if (resultValidation.error) {
 
-      const productCrated = await ProductModel.create({ input });
+      return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
 
-      return res.json({ message: `Product ${productCrated.name} created.` });
-
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(internalError)
     };
 
+    const productCreated = await ProductModel.create({ input: resultValidation.data });
 
+    if (productCreated.error) return res.status(400).json({ error: productCreated.error });
 
-    return res.json(resultValdiation.data);
+    return res.json({ message: `Product ${productCreated.name} created.` });
 
   };
 
   static async update(req, res) {
+
+    const { id } = req.params;
+
+    const input = req.body;
+
+    const resultValidation = await validatePartialProduct(input);
+
+    if (resultValidation.error) {
+      return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
+    };
+
+    const productUpdated = await ProductModel.update({ id, input: resultValidation.data });
+
+    if (productUpdated.error) return res.status(400).json({ error: productUpdated.error });
+
+    
+
+    return res.json({ message: `Product updated.` });
 
   };
 
