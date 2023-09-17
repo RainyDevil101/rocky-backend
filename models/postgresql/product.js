@@ -1,61 +1,57 @@
 import { client } from '../../db/index.js';
+import { buildGetQuery, buildGetQueryById, buildInsertQuery } from '../../query/index.js';
+
+const tableName = 'products';
+const internalError = { error: 'Internal server error.' };
 
 export class ProductModel {
 
   static async getAll() {
 
-    const text = `SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM products WHERE status = true;`;
     try {
-      const { rowCount, rows } = await client.query(text);
-      if (rowCount === 0) {
-        return null;
-      }
+      const query = buildGetQuery({ tableName });
+      const { rowCount, rows } = await client.query(query);
+      if (rowCount === 0) return null;
       return { rowCount, rows };
     } catch (error) {
       console.log(error)
-      return { error: 'Internal server error.' };
+      return internalError;
     };
   };
 
   static async getById({ id }) {
-    const query = {
-      text: 'SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM products WHERE id = $1 AND status = true;',
-      values: [id],
-    };
 
     try {
+      const query = buildGetQueryById({ id, tableName })
       const { rows, rowCount } = await client.query(query);
-      if (rowCount === 0) {
-        return null;
-      };
-      return rows;
+      if (rowCount === 0) return null;
+      return rows[0];
     } catch (error) {
       console.log(error);
-      return { error: 'Internal server error.' };
+      return internalError;
     };
   };
 
   static async create({ input }) {
 
-    const queryValues = Object.values(input);
-
-    const placeHolders = Array.from({ length: queryValues.length }, (_, index) => `$${index + 1}`);
-
-    const query = {
-      text: `INSERT INTO products (${Object.keys(input).join(', ')}) VALUES (${placeHolders.join(', ')});`,
-      values: queryValues,
-    };
-
-    console.log(query);
-
     try {
+      const [{ uuid }] = (await client.query('SELECT uuid_generate_v4() AS uuid;')).rows;
 
-      return input;
+      const id = uuid;
+      input.id = id;
+
+
+      const query = buildInsertQuery({ input, tableName });
+      const productCreatedQuery = buildGetQueryById({ id, tableName });
+
+      await client.query(query);
+      const { rows } = await client.query(productCreatedQuery);
+
+      return rows[0];
     } catch (error) {
       console.log(error);
-      return false;
-    };
-
+      return internalError;
+    }
   };
 
   static async update() {

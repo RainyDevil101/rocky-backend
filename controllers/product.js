@@ -1,6 +1,8 @@
 import { ProductModel } from '../models/postgresql/index.js';
 import { validateProduct } from '../validations/validationsBySchema.js';
 
+const internalError = { error: 'Internal server error.' };
+
 export class ProductController {
   static async getAll(req, res) {
     try {
@@ -9,7 +11,7 @@ export class ProductController {
       res.status(400).json({ message: 'Products not found.' });
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ message: 'Internal server error.' });
+      return res.status(400).json(internalError);
     }
   };
 
@@ -23,32 +25,35 @@ export class ProductController {
       return res.status(400).json({ message: 'Product not found.' })
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ message: 'Internal server error.' });
+      return res.status(400).json(internalError);
     };
 
   };
 
   static async create(req, res) {
-    
+
     const input = req.body;
-
-    const resultValdiation = await validateProduct(input);
-
-    if (resultValdiation.error) {
-      return res.status(400).json({ error: JSON.parse(resultValdiation.error.message) });
-    };
-    
     try {
-      const result = await ProductModel.create({ input });
+
+      const resultValdiation = await validateProduct(input);
+
+      if (resultValdiation.error) {
+        return res.status(400).json({ error: JSON.parse(resultValdiation.error.message) });
+      };
+
+      const productCrated = await ProductModel.create({ input });
+
+      return res.json({ message: `Product ${productCrated.name} created.` });
 
     } catch (error) {
-      
+      console.log(error);
+      return res.status(400).json(internalError)
     };
 
 
 
-    return res.json(req.body);
-    
+    return res.json(resultValdiation.data);
+
   };
 
   static async update(req, res) {
