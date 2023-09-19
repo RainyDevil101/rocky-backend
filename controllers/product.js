@@ -16,9 +16,15 @@ export class ProductController {
 
     const { id } = req.params;
 
+    if (!id || id.length === 0) {
+      return res.status(400).json({ error: 'Invalid id.' });
+    };
+
     const product = await ProductModel.getById({ id });
 
-    if (product.error) return res.status(400).json({ message: 'Product not found.' });
+    console.log(product);
+
+    if (product.error || !product) return res.status(400).json({ message: 'Product not found.' });
 
     return res.json(product);
 
@@ -27,6 +33,10 @@ export class ProductController {
   static async create(req, res) {
 
     const input = req.body;
+
+    if (!input || input.length === 0) {
+      return res.status(400).json({ error: 'Body needed.' });
+    };
 
     const resultValidation = await validateProduct(input);
 
@@ -47,8 +57,14 @@ export class ProductController {
   static async update(req, res) {
 
     const { id } = req.params;
-
     const input = req.body;
+
+    if (!id || id.length === 0) {
+      return res.status(400).json({ error: 'Invalid id.' });
+    };
+    if (!input || input.length === 0) {
+      return res.status(400).json({ error: 'Body needed.' });
+    };
 
     const resultValidation = await validatePartialProduct(input);
 
@@ -60,13 +76,23 @@ export class ProductController {
 
     if (productUpdated.error) return res.status(400).json({ error: productUpdated.error });
 
-    
-
-    return res.json({ message: `Product updated.` });
+    return res.json({ message: `Product ${productUpdated} updated.` });
 
   };
 
   static async delete(req, res) {
+
+    const { id } = req.params;
+
+    if (!id || id.length === 0) {
+      return res.status(400).json({ error: 'Invalid id.' });
+    };
+
+    const productDeleted = await ProductModel.delete({ id });
+
+    if (productDeleted.error) return res.json({ error: productDeleted.error });
+
+    return res.json({ message: `Product ${productDeleted} deleted.` })
 
   };
 
