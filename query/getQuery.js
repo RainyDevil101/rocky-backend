@@ -1,22 +1,28 @@
-// Get products
+// Get
 
-export const buildGetQuery = ({ tableName }) => {
+export const buildGetQuery = ({ tableName, fieldNames }) => {
 
   if (typeof tableName !== 'string' || tableName.trim() === '') {
     throw new Error('Table must be a non-empty array.');
   };
 
+  if (!Array.isArray(fieldNames) || fieldNames.length === 0) {
+    throw new Error('fieldNames must be a non-empty array of field names.');
+  };
+
+  const fieldList = fieldNames.join(', ');
+
   const query = {
-    text: `SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM ${tableName} WHERE status = true;`,
+    text: `SELECT ${fieldList} FROM ${tableName} WHERE status = true;`,
   };
 
   return query;
 
 };
 
-// Get product by id
+// Get by id
 
-export const buildGetQueryById = ({ id, tableName }) => {
+export const buildGetQueryById = ({ id, tableName, fieldNames }) => {
 
   if (typeof id !== 'string' || id.trim() === '') {
     throw new Error(' ID must be a non-empty string.');
@@ -26,15 +32,21 @@ export const buildGetQueryById = ({ id, tableName }) => {
     throw new Error('Table must be a non-empty array.');
   };
 
+  if (!Array.isArray(fieldNames) || fieldNames.length === 0) {
+    throw new Error('fieldNames must be a non-empty array of field names.');
+  };
+
+  const fieldList = fieldNames.join(', ');
+
   const query = {
-    text: `SELECT id, name, description, price, image, fact_sheet, presentation, seasonality FROM ${tableName} WHERE id = $1 AND status = true;`,
+    text: `SELECT ${fieldList} FROM ${tableName} WHERE id = $1 AND status = true;`,
     values: [id],
   };
 
   return query;
 };
 
-// Create product
+// Create
 
 export const buildInsertQuery = ({ input, tableName }) => {
 
@@ -58,7 +70,7 @@ export const buildInsertQuery = ({ input, tableName }) => {
   return query;
 };
 
-// Update product
+// Update
 
 export const buildUpdateQuery = ({ id, input, tableName }) => {
 
@@ -85,7 +97,7 @@ export const buildUpdateQuery = ({ id, input, tableName }) => {
 
 };
 
-// Delete product
+// Delete
 
 export const buildDeleteQuery = ({ id, tableName }) => {
 

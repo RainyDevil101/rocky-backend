@@ -1,16 +1,21 @@
 import { client } from '../../db/index.js';
 import { buildDeleteQuery, buildGetQuery, buildGetQueryById, buildInsertQuery, buildUpdateQuery } from '../../query/index.js';
 
-const tableName = 'products';
-const single = 'product';
+export class QueryModel {
 
-export class ProductModel {
+  constructor({ tableName, singleName, fieldNames }) {
 
-  static async getAll() {
+    this.tableName = tableName;
+    this.singleName = singleName;
+    this.fieldNames = fieldNames;
+
+  };
+
+  async getAll() {
 
     try {
 
-      const query = buildGetQuery({ tableName });
+      const query = buildGetQuery({ tableName: this.tableName, fieldNames: this.fieldNames });
 
       const { rowCount, rows } = await client.query(query);
 
@@ -24,11 +29,11 @@ export class ProductModel {
     };
   };
 
-  static async getById({ id }) {
+  async getById({ id }) {
 
     try {
 
-      const query = buildGetQueryById({ id, tableName });
+      const query = buildGetQueryById({ id, tableName: this.tableName, fieldNames: this.fieldNames });
 
       const { rows, rowCount } = await client.query(query);
 
@@ -42,7 +47,7 @@ export class ProductModel {
     };
   };
 
-  static async create({ input }) {
+  async create({ input }) {
 
 
     try {
@@ -52,9 +57,9 @@ export class ProductModel {
       const id = uuid;
       input.id = id;
 
-      const query = buildInsertQuery({ input, tableName });
+      const query = buildInsertQuery({ input, tableName: this.tableName });
 
-      const productCreatedQuery = buildGetQueryById({ id, tableName });
+      const productCreatedQuery = buildGetQueryById({ id, tableName: this.tableName, fieldNames: this.fieldNames });
 
       await client.query(query);
 
@@ -68,11 +73,11 @@ export class ProductModel {
     }
   };
 
-  static async update({ id, input }) {
+  async update({ id, input }) {
 
     try {
 
-      const query = buildUpdateQuery({ id, input, tableName });
+      const query = buildUpdateQuery({ id, input, tableName: this.tableName });
 
       const { rowCount } = await client.query(query);
 
@@ -91,11 +96,11 @@ export class ProductModel {
 
   };
 
-  static async delete({ id }) {
+  async delete({ id }) {
 
     try {
 
-      const query = buildDeleteQuery({ id, tableName });
+      const query = buildDeleteQuery({ id, tableName: this.tableName });
 
       const { name } = await this.getById({ id });
 

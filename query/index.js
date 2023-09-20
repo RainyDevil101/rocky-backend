@@ -1,1 +1,1 @@
-export * from './productsQuery.js';
+export * from './getQuery.js';

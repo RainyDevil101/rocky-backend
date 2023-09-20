@@ -6,7 +6,7 @@ export const productSchema = z.object({
       message: 'Name is required and must be a non-empty string.',
     })
     .max(255, {
-      message: 'Name must not exceed 255 characters.'
+      message: 'Name must not exceed 255 characters.',
     }),
 
   description: z.string()
@@ -22,7 +22,7 @@ export const productSchema = z.object({
       message: 'Price must be greater than or equal to 1 CLP.',
     })
     .max(9999999, {
-      message: 'Price must not exceed 9.999.999 CLP.'
+      message: 'Price must not exceed 9.999.999 CLP.',
     }),
 
   image: z.string()
@@ -56,5 +56,5 @@ export const productSchema = z.object({
     })
     .max(255, {
       message: 'Seasonality must not exceed 255 elements.'
-    })
+    }),
 });

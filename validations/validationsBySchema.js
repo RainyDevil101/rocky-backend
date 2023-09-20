@@ -1,9 +1,10 @@
-import { productSchema } from '../schemas/index.js';
+import { locationSchema, productSchema } from '../schemas/index.js';
 
-export const validateProduct = async (object) => {
-  return productSchema.safeParseAsync(object);
+export const createValidator = (schema) => async (object) => {
+  return schema.safeParseAsync(object);
 };
 
-export const validatePartialProduct = async (object) => {
-  return productSchema.partial().safeParseAsync(object);
-};
+export const validateProduct = createValidator(productSchema);
+export const validatePartialProduct = createValidator(productSchema.partial());
+export const validateLocation = createValidator(locationSchema);
+export const validatePartialLocation = createValidator(locationSchema.partial());

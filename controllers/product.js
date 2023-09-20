@@ -1,12 +1,22 @@
-import { ProductModel } from '../models/postgresql/index.js';
+import { QueryModel } from '../models/postgresql/index.js';
+import { productsInfo } from '../utils/tableInfo.js';
 import { validatePartialProduct, validateProduct } from '../validations/validationsBySchema.js';
 
 export class ProductController {
+
+  static queryModel = new QueryModel({
+    tableName: productsInfo.tableName,
+    singleName: productsInfo.singleName,
+    fieldNames: productsInfo.fieldNames,
+  });
+
   static async getAll(req, res) {
 
-    const products = await ProductModel.getAll();
+    console.log(ProductController.queryModel);
 
-    if (products.error) return res.status(400).json({ message: 'Products not found.' });
+    const products = await ProductController.queryModel.getAll();
+
+    if (products.error) return res.status(400).json({ error: products.error });
 
     return res.json(products);
 
@@ -20,11 +30,9 @@ export class ProductController {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
-    const product = await ProductModel.getById({ id });
+    const product = await QueryModel.getById({ id });
 
-    console.log(product);
-
-    if (product.error || !product) return res.status(400).json({ message: 'Product not found.' });
+    if (product.error || !product) return res.status(400).json({ error: product.error });
 
     return res.json(product);
 
@@ -46,7 +54,7 @@ export class ProductController {
 
     };
 
-    const productCreated = await ProductModel.create({ input: resultValidation.data });
+    const productCreated = await QueryModel.create({ input: resultValidation.data });
 
     if (productCreated.error) return res.status(400).json({ error: productCreated.error });
 
@@ -72,7 +80,7 @@ export class ProductController {
       return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
     };
 
-    const productUpdated = await ProductModel.update({ id, input: resultValidation.data });
+    const productUpdated = await QueryModel.update({ id, input: resultValidation.data });
 
     if (productUpdated.error) return res.status(400).json({ error: productUpdated.error });
 
@@ -88,7 +96,7 @@ export class ProductController {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
-    const productDeleted = await ProductModel.delete({ id });
+    const productDeleted = await QueryModel.delete({ id });
 
     if (productDeleted.error) return res.json({ error: productDeleted.error });
 
