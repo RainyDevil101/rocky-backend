@@ -6,5 +6,12 @@ export const createValidator = (schema) => async (object) => {
 
 export const validateProduct = createValidator(productSchema);
 export const validatePartialProduct = createValidator(productSchema.partial());
+
 export const validateLocation = createValidator(locationSchema);
 export const validatePartialLocation = createValidator(locationSchema.partial());
+
+export const validateContact = createValidator(locationSchema);
+export const validatePartialContact = createValidator(locationSchema.partial());
+
+export const validateRecipe = createValidator(locationSchema);
+export const validatePartialRecipe = createValidator(locationSchema.partial());

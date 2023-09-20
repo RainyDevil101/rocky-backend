@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { createRecipe, deleteRecipe, getRecipe, getRecipes, updateRecipe } from '../controllers/index.js';
+import { RecipeController } from '../controllers/index.js';
 
 export const recipeRouter = Router();
 
-// /recipes
+// /locations
 
 recipeRouter.route('/')
-  .get(getRecipes)
-  .post(createRecipe);
+  .get(RecipeController.getAll)
+  .post(RecipeController.create);
 
-// /recipes/:id
+// /locations/:id
 
 recipeRouter.route('/:id')
-  .get(getRecipe)
-  .patch(updateRecipe)
-  .delete(deleteRecipe);
+  .get(RecipeController.getById)
+  .patch(RecipeController.update)
+  .delete(RecipeController.delete);

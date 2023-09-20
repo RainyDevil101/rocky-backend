@@ -1,30 +1,39 @@
+import { QueryModel } from '../models/postgresql/index.js';
+import { locationsInfo } from '../utils/index.js';
 
-export const getLocations = async (req, res) => {
-  res.json({
-    message: 'get all'
-  });
-};
 
-export const getLocation = async(req, res) => {
-  res.json({
-    message: 'get one '
-  });
-};
+export class LocationController {
 
-export const createLocation = async(req, res) => {
-  res.json({
-    message: 'create '
-  });
-};
 
-export const updateLocation = async(req, res) => {
-  res.json({
-    message: 'patch '
+  static queryModel = new QueryModel({
+    tableName: locationsInfo.tableName,
+    singleName: locationsInfo.singleName,
+    fieldNames: locationsInfo.fieldNames,
   });
-};
 
-export const deleteLocation = async(req, res) => {
-  res.json({
-    message: 'delete '
-  });
+  static async getAll(req, res) {
+
+    return res.json({ message: 'getAll' });
+  };
+
+  static async getById(req, res) {
+
+    return res.json({ message: 'getById' });
+  };
+
+  static async create(req, res) {
+
+    return res.json({ message: 'create' });
+  };
+
+  static async update(req, res) {
+
+    return res.json({ message: 'update' });
+  };
+
+  static async delete(req, res) {
+
+    return res.json({ message: 'delete' });
+  };
+
 };

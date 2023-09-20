@@ -1,30 +1,39 @@
+import { QueryModel } from '../models/postgresql/index.js';
+import { recipesInfo } from '../utils/index.js';
 
-export const getRecipes = async (req, res) => {
-  res.json({
-    message: 'get all'
-  });
-};
 
-export const getRecipe = async(req, res) => {
-  res.json({
-    message: 'get one '
-  });
-};
+export class RecipeController {
 
-export const createRecipe = async(req, res) => {
-  res.json({
-    message: 'create '
-  });
-};
 
-export const updateRecipe = async(req, res) => {
-  res.json({
-    message: 'patch '
+  static queryModel = new QueryModel({
+    tableName: recipesInfo.tableName,
+    singleName: recipesInfo.singleName,
+    fieldNames: recipesInfo.fieldNames,
   });
-};
 
-export const deleteRecipe = async(req, res) => {
-  res.json({
-    message: 'delete '
-  });
+  static async getAll(req, res) {
+
+    return res.json({ message: 'getAll' });
+  };
+
+  static async getById(req, res) {
+
+    return res.json({ message: 'getById' });
+  };
+
+  static async create(req, res) {
+
+    return res.json({ message: 'create' });
+  };
+
+  static async update(req, res) {
+
+    return res.json({ message: 'update' });
+  };
+
+  static async delete(req, res) {
+
+    return res.json({ message: 'delete' });
+  };
+
 };

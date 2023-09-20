@@ -1,18 +1,17 @@
 import { Router } from 'express';
-import { createLocation, deleteLocation, getLocation, getLocations, updateLocation } from '../controllers/index.js';
-
+import { LocationController } from '../controllers/index.js';
 
 export const locationRouter = Router();
 
-// /locations 
+// /locations
 
 locationRouter.route('/')
-  .get(getLocations)
-  .post(createLocation);
-
+  .get(LocationController.getAll)
+  .post(LocationController.create);
+  
 // /locations/:id
 
 locationRouter.route('/:id')
-  .get(getLocation)
-  .patch(updateLocation)
-  .delete(deleteLocation);
+  .get(LocationController.getById)
+  .patch(LocationController.update)
+  .delete(LocationController.delete);

@@ -1,5 +1,5 @@
 import { QueryModel } from '../models/postgresql/index.js';
-import { productsInfo } from '../utils/tableInfo.js';
+import { productsInfo } from '../utils/index.js';
 import { validatePartialProduct, validateProduct } from '../validations/validationsBySchema.js';
 
 export class ProductController {
@@ -11,8 +11,6 @@ export class ProductController {
   });
 
   static async getAll(req, res) {
-
-    console.log(ProductController.queryModel);
 
     const products = await ProductController.queryModel.getAll();
 
@@ -30,9 +28,9 @@ export class ProductController {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
-    const product = await QueryModel.getById({ id });
+    const product = await ProductController.queryModel.getById({ id });
 
-    if (product.error || !product) return res.status(400).json({ error: product.error });
+    if (product.error) return res.status(400).json({ error: product.error });
 
     return res.json(product);
 
@@ -54,7 +52,7 @@ export class ProductController {
 
     };
 
-    const productCreated = await QueryModel.create({ input: resultValidation.data });
+    const productCreated = await ProductController.queryModel.create({ input: resultValidation.data });
 
     if (productCreated.error) return res.status(400).json({ error: productCreated.error });
 
@@ -80,7 +78,7 @@ export class ProductController {
       return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
     };
 
-    const productUpdated = await QueryModel.update({ id, input: resultValidation.data });
+    const productUpdated = await ProductController.queryModel.update({ id, input: resultValidation.data });
 
     if (productUpdated.error) return res.status(400).json({ error: productUpdated.error });
 
@@ -96,7 +94,7 @@ export class ProductController {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
-    const productDeleted = await QueryModel.delete({ id });
+    const productDeleted = await ProductController.queryModel.delete({ id });
 
     if (productDeleted.error) return res.json({ error: productDeleted.error });
 

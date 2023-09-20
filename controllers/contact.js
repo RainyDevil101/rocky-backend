@@ -1,30 +1,39 @@
+import { QueryModel } from '../models/postgresql/index.js';
+import { contactsInfo } from '../utils/index.js';
 
-export const getContacts = async (req, res) => {
-  res.json({
-    message: 'get all'
-  });
-};
 
-export const getContact = async(req, res) => {
-  res.json({
-    message: 'get one '
-  });
-};
+export class ContactController {
 
-export const createContact = async(req, res) => {
-  res.json({
-    message: 'create '
-  });
-};
 
-export const updateContact = async(req, res) => {
-  res.json({
-    message: 'patch '
+  static queryModel = new QueryModel({
+    tableName: contactsInfo.tableName,
+    singleName: contactsInfo.singleName,
+    fieldNames: contactsInfo.fieldNames,
   });
-};
 
-export const deleteContact = async(req, res) => {
-  res.json({
-    message: 'delete '
-  });
+  static async getAll(req, res) {
+
+    return res.json({ message: 'getAll' });
+  };
+
+  static async getById(req, res) {
+
+    return res.json({ message: 'getById' });
+  };
+
+  static async create(req, res) {
+
+    return res.json({ message: 'create' });
+  };
+
+  static async update(req, res) {
+
+    return res.json({ message: 'update' });
+  };
+
+  static async delete(req, res) {
+
+    return res.json({ message: 'delete' });
+  };
+
 };

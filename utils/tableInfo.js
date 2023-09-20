@@ -13,7 +13,7 @@ export const contactsInfo = {
   singleName: 'contact',
   fieldNames: ['id', 'name', 'email', 'message'],
 };
-export const recipessInfo = {
+export const recipesInfo = {
   tableName: 'recipes',
   singleName: 'recipe',
   fieldNames: ['id', 'name', 'ingredients', 'instrucctions', 'image', 'id_product'],
