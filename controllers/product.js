@@ -24,7 +24,7 @@ export class ProductController {
 
     const { id } = req.params;
 
-    if (!id || id.length === 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
@@ -40,17 +40,11 @@ export class ProductController {
 
     const input = req.body;
 
-    if (!input || input.length === 0) {
-      return res.status(400).json({ error: 'Body needed.' });
-    };
+    if (!input || input.length === 0) return res.status(400).json({ error: 'Body needed.' });
 
     const resultValidation = await validateProduct(input);
 
-    if (resultValidation.error) {
-
-      return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
-
-    };
+    if (resultValidation.error) return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
 
     const productCreated = await ProductController.queryModel.create({ input: resultValidation.data });
 
@@ -65,7 +59,7 @@ export class ProductController {
     const { id } = req.params;
     const input = req.body;
 
-    if (!id || id.length === 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id.' });
     };
     if (!input || input.length === 0) {
@@ -90,13 +84,13 @@ export class ProductController {
 
     const { id } = req.params;
 
-    if (!id || id.length === 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id.' });
     };
 
     const productDeleted = await ProductController.queryModel.delete({ id });
 
-    if (productDeleted.error) return res.json({ error: productDeleted.error });
+    if (productDeleted.error) return res.status(400).json({ error: productDeleted.error });
 
     return res.json({ message: `Product ${productDeleted} deleted.` })
 

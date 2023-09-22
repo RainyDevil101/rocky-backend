@@ -37,7 +37,7 @@ export class QueryModel {
 
       const { rows, rowCount } = await client.query(query);
 
-      if (rowCount === 0) return { error: `${singleName} not found.` };
+      if (rowCount === 0) return { error: `${this.singleName} not found.` };
 
       return rows[0];
 
@@ -81,11 +81,11 @@ export class QueryModel {
 
       const { rowCount } = await client.query(query);
 
-      if (rowCount === 0) return { error: `${singleName} not found.` };
+      if (rowCount === 0) return { error: `${this.singleName} not found.` };
 
       const { name } = await this.getById({ id });
 
-      if (!name || name.length === 0) return { error: `${singleName} not found.` };
+      if (!name || name.length === 0) return { error: `${this.singleName} not found.` };
 
       return name;
 
@@ -108,7 +108,7 @@ export class QueryModel {
 
       const { rowCount } = await client.query(query);
 
-      if (rowCount === 0) return { error: `${singleName} not found.` };
+      if (rowCount === 0) return { error: `${this.singleName} not found.` };
 
       return name;
     } catch (error) {
