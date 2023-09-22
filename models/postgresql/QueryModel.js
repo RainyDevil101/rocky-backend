@@ -1,5 +1,5 @@
 import { client } from '../../db/index.js';
-import { buildDeleteQuery, buildGetQuery, buildGetQueryById, buildInsertQuery, buildUpdateQuery } from '../../query/index.js';
+import { buildDeleteQuery, buildGetQuery, buildGetQueryById, buildGetQueryByTwoId, buildInsertQuery, buildUpdateQuery } from '../../query/index.js';
 
 export class QueryModel {
 
@@ -19,7 +19,7 @@ export class QueryModel {
 
       const { rowCount, rows } = await client.query(query);
 
-      if (rowCount === 0) return { error: `${tableName} not found.` };
+      if (rowCount === 0) return { error: `${this.tableName} not found.` };
 
       return { rowCount, rows };
 
@@ -73,6 +73,27 @@ export class QueryModel {
     }
   };
 
+  async createTwoId({ input, recipe_id, ingredient_id }) {
+
+
+    try {
+
+      const query = buildInsertQuery({ input, tableName: this.tableName });
+
+      const productCreatedQuery = buildGetQueryByTwoId({ recipe_id, ingredient_id, tableName: this.tableName, fieldNames: this.fieldNames });
+
+      await client.query(query);
+
+      const { rows } = await client.query(productCreatedQuery);
+
+      return rows[0];
+
+    } catch (error) {
+      console.error(error);
+      return { error: error.message };
+    }
+  };
+
   async update({ id, input }) {
 
     try {
@@ -102,7 +123,7 @@ export class QueryModel {
 
       const query = buildDeleteQuery({ id, tableName: this.tableName });
 
-      const { name } = await this.getById({ id,  });
+      const { name } = await this.getById({ id, });
 
       if (!name || name.length === 0) return { error: `${this.singleName} not found.` };
 

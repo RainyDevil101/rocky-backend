@@ -46,6 +46,34 @@ export const buildGetQueryById = ({ id, tableName, fieldNames }) => {
   return query;
 };
 
+// Get by two id
+
+export const buildGetQueryByTwoId = ({ recipe_id, ingredient_id, tableName, fieldNames }) => {
+
+  console.log(recipe_id, ingredient_id);
+
+  if (typeof recipe_id !== 'string' || recipe_id.trim() === '' || typeof ingredient_id !== 'string' || ingredient_id.trim() === '') {
+    throw new Error(' ID must be a non-empty string.');
+  };
+
+  if (typeof tableName !== 'string' || tableName.trim() === '') {
+    throw new Error('Table must be a non-empty array.');
+  };
+
+  if (!Array.isArray(fieldNames) || fieldNames.length === 0) {
+    throw new Error('fieldNames must be a non-empty array of field names.');
+  };
+
+  const fieldList = fieldNames.join(', ');
+
+  const query = {
+    text: `SELECT ${fieldList} FROM ${tableName} WHERE recipe_id = $1 AND ingredient_id = $2 AND status = true;`,
+    values: [recipe_id, ingredient_id],
+  };
+
+  return query;
+};
+
 // Create
 
 export const buildInsertQuery = ({ input, tableName }) => {

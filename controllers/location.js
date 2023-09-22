@@ -26,9 +26,7 @@ export class LocationController {
 
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ error: 'Invalid id.' });
-    };
+    if (!id) return res.status(400).json({ error: 'Invalid id.' });
 
     const location = await LocationController.queryModel.getById({ id });
 
@@ -41,17 +39,11 @@ export class LocationController {
 
     const input = req.body;
 
-    if (!input || input.length === 0) {
-      return res.status(400).json({ error: 'Body needed.' });
-    };
+    if (!input || input.length === 0) return res.status(400).json({ error: 'Body needed.' });
 
     const resultValidation = await validateLocation(input);
 
-    if (resultValidation.error) {
-
-      return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
-
-    };
+    if (resultValidation.error) return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
 
     const locationCreated = await LocationController.queryModel.create({ input: resultValidation.data });
 
@@ -66,40 +58,34 @@ export class LocationController {
     const { id } = req.params;
     const input = req.body;
 
-    if (!id) {
-      return res.status(400).json({ error: 'Invalid id.' });
-    };
+    if (!id) return res.status(400).json({ error: 'Invalid id.' });
 
-    if (!input || input.length === 0) {
-      return res.status(400).json({ error: 'Body needed.' });
-    };
+    if (!input || input.length === 0) return res.status(400).json({ error: 'Body needed.' });
 
     const resultValidation = await validatePartialLocation(input);
 
-    if (resultValidation.error) {
-      return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
-    };
+    if (resultValidation.error) return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
 
     const locationUpdated = await LocationController.queryModel.update({ id, input: resultValidation.data });
 
     if (locationUpdated.error) return res.status(400).json({ error: locationUpdated.error });
 
     return res.json({ message: `Product ${locationUpdated} updated.` });
+
   };
 
   static async delete(req, res) {
 
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ error: 'Invalid id.' });
-    };
+    if (!id) return res.status(400).json({ error: 'Invalid id.' });
 
     const locationDeleted = await LocationController.queryModel.delete({ id });
 
     if (locationDeleted.error) return res.status(400).json({ error: locationDeleted.error });
 
     return res.json({ message: `Location ${locationDeleted} deleted.` });
+    
   };
 
 };

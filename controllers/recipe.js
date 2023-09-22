@@ -1,6 +1,6 @@
 import { QueryModel } from '../models/postgresql/index.js';
 import { recipesInfo } from '../utils/index.js';
-import { validateRecipe } from '../validations/validationsBySchema.js';
+import { validatePartialRecipe, validateRecipe } from '../validations/validationsBySchema.js';
 
 
 export class RecipeController {
@@ -56,12 +56,35 @@ export class RecipeController {
 
   static async update(req, res) {
 
-    return res.json({ message: 'update' });
+    const { id } = req.params;
+    const input = req.body;
+
+    if (!id) return res.status(400).json({ error: 'Invalid id.' });
+
+    if (!input || input.length === 0) return res.status(400).json({ error: 'Body needed.' });
+
+    const resultValidation = await validatePartialRecipe(input);
+
+    if (resultValidation.error) return res.status(400).json({ error: JSON.parse(resultValidation.error.message) });
+
+    const recipeUpdated = await RecipeController.queryModel.update({ id, input: resultValidation.data });
+
+    if (recipeUpdated.error) return res.status(400).json({ error: recipeUpdated.error });
+
+    return res.json({ message: `Recipe ${recipeUpdated} updated.` });
+
   };
 
   static async delete(req, res) {
 
-    return res.json({ message: 'delete' });
+    const { id } = req.params;
+
+    if (!id) return res.status(400).json({ error: 'Invalid id.' });
+
+    const recipeDeleted = await RecipeController.queryModel.delete({ id });
+
+    return res.json({ message: `Product ${recipeDeleted} deleted.` });
+    
   };
 
 };

@@ -16,16 +16,16 @@ export const contactsInfo = {
 export const recipesInfo = {
   tableName: 'recipes',
   singleName: 'Recipe',
-  fieldNames: ['id', 'name', 'instructions', 'image', 'id_product'],
+  fieldNames: ['id', 'name', 'instructions', 'image', 'id_product', 'created_by'],
 };
 
-export const ingredients = {
+export const ingredientsInfo = {
   tableName: 'ingredients',
   singleName: 'Ingredient',
   fieldNames: ['id', 'name'],
 };
 
-export const recipeIngredients = {
+export const recipeIngredientsInfo = {
   tableName: 'recipe_ingredients',
   singleName: 'Recipe ingredient',
   fieldNames: ['recipe_id', 'ingredient_id', 'quantity'],

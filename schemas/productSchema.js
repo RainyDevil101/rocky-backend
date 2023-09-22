@@ -85,7 +85,7 @@ export const productSchema = z.object({
       message: 'Integer Column must not exceed 100000.00.',
     })
     .transform(value => parseFloat(value.toFixed(2))),
-    
+
   calories_energy: z.number()
     .int()
     .min(0, {
@@ -96,7 +96,7 @@ export const productSchema = z.object({
     })
     .transform(value => parseFloat(value.toFixed(2))),
 
-    protein: z.number()
+  protein: z.number()
     .min(0, {
       message: 'Protein is required and must be a non-empty number.',
     })
@@ -105,7 +105,7 @@ export const productSchema = z.object({
     })
     .transform(value => parseFloat(value.toFixed(2))),
 
-    total_fat: z.number()
+  total_fat: z.number()
     .min(0, {
       message: 'Total fat is required and must be a non-empty number.',
     })
@@ -114,7 +114,7 @@ export const productSchema = z.object({
     })
     .transform(value => parseFloat(value.toFixed(2))),
 
-    carbohydrates: z.number()
+  carbohydrates: z.number()
     .min(0, {
       message: 'Carbohydrates is required and must be a non-empty number.',
     })
@@ -123,7 +123,7 @@ export const productSchema = z.object({
     })
     .transform(value => parseFloat(value.toFixed(2))),
 
-    sugar: z.number()
+  sugar: z.number()
     .min(0, {
       message: 'Sugar is required and must be a non-empty number.',
     })
@@ -132,7 +132,7 @@ export const productSchema = z.object({
     })
     .transform(value => parseFloat(value.toFixed(2))),
 
-    sodium: z.number()
+  sodium: z.number()
     .min(0, {
       message: 'Sodium is required and must be a non-empty number.',
     })
