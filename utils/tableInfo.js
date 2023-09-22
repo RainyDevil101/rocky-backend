@@ -25,7 +25,7 @@ export const ingredients = {
   fieldNames: ['id', 'name'],
 };
 
-export const recipe_ingredients = {
+export const recipeIngredients = {
   tableName: 'recipe_ingredients',
   singleName: 'Recipe ingredient',
   fieldNames: ['recipe_id', 'ingredient_id', 'quantity'],

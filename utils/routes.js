@@ -1,4 +1,4 @@
-import { productRouter, recipeRouter, locationRouter, contactRouter } from '../routes/index.js';
+import { productRouter, recipeRouter, locationRouter, contactRouter, ingredientRouter, recipeIngredientsRouter } from '../routes/index.js';
 
 export const routes = [
   {
@@ -16,5 +16,13 @@ export const routes = [
   {
     prefix: '/api/contacts',
     route: contactRouter,
+  },
+  {
+    prefix: '/api/ingredients',
+    route: ingredientRouter,
+  },
+  {
+    prefix: '/api/recipe-ingredients',
+    route: recipeIngredientsRouter,
   },
 ];
