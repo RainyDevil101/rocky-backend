@@ -11,7 +11,7 @@ export class QueryModel {
 
   };
 
-  async getAll() {
+  getAll = async () => {
 
     try {
 
@@ -29,7 +29,7 @@ export class QueryModel {
     };
   };
 
-  async getById({ id }) {
+  getById = async ({ id }) => {
 
     try {
 
@@ -47,7 +47,7 @@ export class QueryModel {
     };
   };
 
-  async create({ input }) {
+  create = async ({ input }) => {
 
 
     try {
@@ -73,7 +73,7 @@ export class QueryModel {
     }
   };
 
-  async createTwoId({ input, recipe_id, ingredient_id }) {
+  createTwoId = async ({ input, recipe_id, ingredient_id }) => {
 
 
     try {
@@ -94,7 +94,7 @@ export class QueryModel {
     }
   };
 
-  async update({ id, input }) {
+  update = async ({ id, input }) => {
 
     try {
 
@@ -117,7 +117,7 @@ export class QueryModel {
 
   };
 
-  async delete({ id }) {
+  delete = async ({ id }) => {
 
     try {
 

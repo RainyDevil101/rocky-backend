@@ -1,28 +1,30 @@
-import { productRouter, recipeRouter, locationRouter, contactRouter, ingredientRouter, recipeIngredientsRouter } from '../routes/index.js';
+import { createElementRouter } from '../routes/index.js';
+import { productsInfo, recipesInfo, locationsInfo, contactsInfo, ingredientsInfo, recipeIngredientsInfo } from '../utils/index.js';
+import { contactSchema, ingredientSchema, locationSchema, productSchema, recipeIngredientSchema, recipeSchema } from '../schemas/index.js';
 
 export const routes = [
   {
     prefix: '/api/products',
-    route: productRouter,
+    route: createElementRouter({ ...productsInfo, schema: productSchema }),
   },
   {
     prefix: '/api/recipes',
-    route: recipeRouter,
+    route: createElementRouter({ ...recipesInfo, schema: recipeSchema }),
   },
   {
     prefix: '/api/locations',
-    route: locationRouter,
+    route: createElementRouter({ ...locationsInfo, schema: locationSchema }),
   },
   {
     prefix: '/api/contacts',
-    route: contactRouter,
+    route: createElementRouter({ ...contactsInfo, schema: contactSchema }),
   },
   {
     prefix: '/api/ingredients',
-    route: ingredientRouter,
+    route: createElementRouter({ ...ingredientsInfo, schema: ingredientSchema }),
   },
   {
     prefix: '/api/recipe-ingredients',
-    route: recipeIngredientsRouter,
+    route: createElementRouter({ ...recipeIngredientsInfo, schema: recipeIngredientSchema }),
   },
 ];

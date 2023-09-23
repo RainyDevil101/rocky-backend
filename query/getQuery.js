@@ -2,6 +2,8 @@
 
 export const buildGetQuery = ({ tableName, fieldNames }) => {
 
+  console.log(tableName, fieldNames);
+
   if (typeof tableName !== 'string' || tableName.trim() === '') {
     throw new Error('Table must be a non-empty array.');
   };
@@ -128,6 +130,8 @@ export const buildUpdateQuery = ({ id, input, tableName }) => {
 // Delete
 
 export const buildDeleteQuery = ({ id, tableName }) => {
+
+  console.log(tableName);
 
   if (typeof id !== 'string' || id.trim() === '') {
     throw new Error('ID must be a non-empty string.');
